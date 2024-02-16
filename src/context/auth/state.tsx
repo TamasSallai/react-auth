@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }: Props) => {
     try {
       const response = await axios.get('/auth/me')
       const user = response.data.user
+
       setState((prev) => ({
         ...prev,
         user,
@@ -81,8 +82,7 @@ export const AuthProvider = ({ children }: Props) => {
   }, [])
 
   useEffect(() => {
-    checkStatus()
-    setIsLoading(false)
+    checkStatus().then(() => setIsLoading(false))
   }, [])
 
   return (
