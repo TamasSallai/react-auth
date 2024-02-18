@@ -1,9 +1,11 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { AuthContextType, AuthStateType, LoginInput, RegisterInput } from '.'
 import axios from '../../api/axios'
+import { useLocation } from 'react-router-dom'
 
 const initialState: AuthStateType = {
   user: null,
+  isLoading: true,
   isLoggedIn: false,
   error: null,
 }
@@ -12,7 +14,7 @@ const initialContext: AuthContextType = {
   ...initialState,
   register: async (_) => {},
   login: async (_) => {},
-  logout: () => {},
+  logout: async () => {},
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -23,21 +25,32 @@ type Props = {
   children: React.ReactNode
 }
 
+const errorlessPaths = ['/signin', '/signup']
+
 export const AuthProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [{ user, isLoggedIn, error }, setState] =
     useState<AuthStateType>(initialState)
 
+  const location = useLocation()
+
   const checkStatus = useCallback(async () => {
     try {
-      const response = await axios.get('/auth/me')
+      const response = await axios.post('/auth/me', {
+        shouldThrowError: !errorlessPaths.includes(location.pathname),
+      })
+
       const user = response.data.user
 
-      setState((prev) => ({
-        ...prev,
-        user,
-        isLoggedIn: !!response.data.user,
-      }))
+      if (!user) {
+        setState(initialContext)
+      } else {
+        setState((prev) => ({
+          ...prev,
+          user,
+          isLoggedIn: !!response.data.user,
+        }))
+      }
     } catch (error) {
       setState(initialState)
     }
@@ -53,7 +66,7 @@ export const AuthProvider = ({ children }: Props) => {
         isLoggedIn: !!response.data.user,
       }))
     } catch (error) {
-      console.log(error)
+      throw error
     }
   }, [])
 
@@ -68,14 +81,14 @@ export const AuthProvider = ({ children }: Props) => {
         isLoggedIn: !!response.data.user,
       }))
     } catch (error) {
-      console.log(error)
+      throw error
     }
   }, [])
 
   const logout = useCallback(async () => {
     try {
       await axios.get('/auth/logout')
-      checkStatus()
+      await checkStatus()
     } catch (error) {
       setState(initialState)
     }
@@ -89,6 +102,7 @@ export const AuthProvider = ({ children }: Props) => {
     <AuthContext.Provider
       value={{
         user,
+        isLoading,
         isLoggedIn,
         error,
         register,
