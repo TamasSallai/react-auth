@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { AxiosError } from 'axios'
 import { useAuthContext } from '../context/auth'
 
-const initialFormValues = {
-  email: '',
-  password: '',
+type SignInInput = {
+  email: string
+  password: string
 }
 
 const SignIn = () => {
@@ -14,49 +15,67 @@ const SignIn = () => {
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
 
-  const [formValues, setFormValues] = useState(initialFormValues)
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<SignInInput>()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value })
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setFormValues(initialFormValues)
+  const onSubmit = async (data: SignInInput) => {
     try {
-      await login(formValues)
+      await login(data)
       navigate(from, { replace: true })
     } catch (error) {
-      console.log(error)
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.error?.message
+        setError('root', { type: 'custom', message })
+      } else {
+        setError('root', { type: 'custom', message: 'Something went wrong' })
+      }
     }
+  }
+
+  const onError = () => {
+    console.log('error')
   }
 
   return (
     <div>
       <h1>Sign In</h1>
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <label>
-          E-mail:
-          <input
-            type="email"
-            name="email"
-            value={formValues.email}
-            onChange={handleChange}
-            required
-            autoComplete="on"
-          />
-        </label>
+      <form className="auth-form" onSubmit={handleSubmit(onSubmit, onError)}>
+        {errors.root?.message}
 
-        <label>
-          Password:
+        <div>
+          <label htmlFor="email">E-mail:</label>
           <input
-            type="password"
-            name="password"
-            value={formValues.password}
-            onChange={handleChange}
-            required
+            id="email"
+            {...register('email', {
+              required: 'E-mail is required.',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Invalid email address',
+              },
+            })}
           />
-        </label>
+          {errors.email && <p>{errors.email?.message}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            id="password"
+            type="password"
+            {...register('password', {
+              required: 'Password is required.',
+              minLength: {
+                value: 6,
+                message: 'Password must have 6 or more characters. ',
+              },
+            })}
+          />
+          {errors.password && <p>{errors.password?.message}</p>}
+        </div>
 
         <button>Sign In</button>
       </form>
