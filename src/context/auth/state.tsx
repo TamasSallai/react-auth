@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { AuthContextType, AuthStateType, LoginInput, RegisterInput } from '.'
 import axios from '../../api/axios'
-import { useLocation } from 'react-router-dom'
 
 const initialState: AuthStateType = {
   user: null,
@@ -25,20 +24,14 @@ type Props = {
   children: React.ReactNode
 }
 
-const errorlessPaths = ['/signin', '/signup']
-
 export const AuthProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [{ user, isLoggedIn, error }, setState] =
     useState<AuthStateType>(initialState)
 
-  const location = useLocation()
-
   const checkStatus = useCallback(async () => {
     try {
-      const response = await axios.post('/auth/me', {
-        shouldThrowError: !errorlessPaths.includes(location.pathname),
-      })
+      const response = await axios.get('/auth/me')
 
       const user = response.data.user
 
