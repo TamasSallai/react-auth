@@ -1,23 +1,17 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
-import { AuthContextType, AuthStateType, LoginInput, RegisterInput } from '.'
+import { AuthContextType, LoginInput, RegisterInput, User } from '.'
 import axios from '../../api/axios'
 
-const initialState: AuthStateType = {
+const initialState: AuthContextType = {
   user: null,
-  isLoading: true,
-  isLoggedIn: false,
-  error: null,
-}
-
-const initialContext: AuthContextType = {
-  ...initialState,
   register: async (_) => {},
   login: async (_) => {},
   logout: async () => {},
+  error: null,
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
-  initialContext
+  initialState
 )
 
 type Props = {
@@ -26,26 +20,17 @@ type Props = {
 
 export const AuthProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(true)
-  const [{ user, isLoggedIn, error }, setState] =
-    useState<AuthStateType>(initialState)
+  const [error, setError] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
 
   const checkStatus = useCallback(async () => {
     try {
       const response = await axios.get('/auth/me')
-
       const user = response.data.user
-
-      if (!user) {
-        setState(initialContext)
-      } else {
-        setState((prev) => ({
-          ...prev,
-          user,
-          isLoggedIn: !!response.data.user,
-        }))
-      }
+      setUser(user)
     } catch (error) {
-      setState(initialState)
+      setError(error)
+      setUser(null)
     }
   }, [])
 
@@ -53,12 +38,9 @@ export const AuthProvider = ({ children }: Props) => {
     try {
       const response = await axios.post('/auth/register', input)
       const user = response.data.user
-      setState((prev) => ({
-        ...prev,
-        user,
-        isLoggedIn: !!response.data.user,
-      }))
+      setUser(user)
     } catch (error) {
+      setError(error)
       throw error
     }
   }, [])
@@ -67,13 +49,9 @@ export const AuthProvider = ({ children }: Props) => {
     try {
       const response = await axios.post('/auth/login', input)
       const user = response.data.user
-
-      setState((prev) => ({
-        ...prev,
-        user,
-        isLoggedIn: !!response.data.user,
-      }))
+      setUser(user)
     } catch (error) {
+      setError(error)
       throw error
     }
   }, [])
@@ -83,7 +61,8 @@ export const AuthProvider = ({ children }: Props) => {
       await axios.get('/auth/logout')
       await checkStatus()
     } catch (error) {
-      setState(initialState)
+      setError(error)
+      setUser(null)
     }
   }, [])
 
@@ -95,8 +74,6 @@ export const AuthProvider = ({ children }: Props) => {
     <AuthContext.Provider
       value={{
         user,
-        isLoading,
-        isLoggedIn,
         error,
         register,
         login,

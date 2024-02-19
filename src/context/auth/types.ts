@@ -15,15 +15,10 @@ export interface LoginInput {
   password: string
 }
 
-export interface AuthStateType {
+export interface AuthContextType {
   user: User | null
-  isLoading: boolean
-  isLoggedIn: boolean
-  error: string | null
-}
-
-export interface AuthContextType extends AuthStateType {
   register: (input: RegisterInput) => Promise<void>
   login: (input: LoginInput) => Promise<void>
   logout: () => Promise<void>
+  error: string | null
 }
