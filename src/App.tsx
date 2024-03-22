@@ -5,7 +5,6 @@ import Missing from './pages/Missing'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Home from './pages/Home'
-import './App.css'
 
 function App() {
   return (
