@@ -2,9 +2,8 @@ import { useForm } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { useAuthContext } from '../context/auth'
-import GoogleIcon from '../assets/icons/google.svg'
-import GitHubIcon from '../assets/icons/github.svg'
 import FormGroup from '../components/FormGroup'
+import OAuthButton from '../components/OAuthButton'
 
 type SignInInput = {
   email: string
@@ -49,15 +48,8 @@ const SignIn = () => {
       <h1 className="my-5 text-3xl font-bold sm:text-4xl">Sign In.</h1>
 
       <div className="flex flex-col gap-3">
-        <button className="px-4 py-1.5 flex flex-row items-center gap-3  justify-center rounded-sm outline outline-1 outline-gray-300">
-          <img className="w-5 h-5" src={GoogleIcon} alt="google icon" />
-          <span>Continue with Google</span>
-        </button>
-
-        <button className="px-4 py-1.5 flex flex-row items-center gap-3  justify-center rounded-sm outline outline-1 outline-gray-300">
-          <img className="w-6 h-6" src={GitHubIcon} alt="github icon" />
-          <span>Continue with GitHub</span>
-        </button>
+        <OAuthButton provider="google" />
+        <OAuthButton provider="github" />
       </div>
 
       <div className="w-100 flex flex-row items-center gap-3">
