@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
-import { AuthContextType, LoginInput, RegisterInput, User } from '.'
+import { AuthContextType, LoginPayload, RegisterPayload, User } from '.'
 import axios from '../../api/axios'
 
 const initialState: AuthContextType = {
@@ -25,34 +25,32 @@ export const AuthProvider = ({ children }: Props) => {
 
   const checkStatus = useCallback(async () => {
     try {
-      const response = await axios.get('/auth/me')
+      const response = await axios.get('/auth/profile')
       const user = response.data.user
       setUser(user)
     } catch (error) {
-      setError(error)
       setUser(null)
+      setError(error)
     }
   }, [])
 
-  const register = useCallback(async (input: RegisterInput) => {
+  const register = useCallback(async (payload: RegisterPayload) => {
     try {
-      const response = await axios.post('/auth/register', input)
+      const response = await axios.post('/auth/register', payload)
       const user = response.data.user
       setUser(user)
     } catch (error) {
       setError(error)
-      throw error
     }
   }, [])
 
-  const login = useCallback(async (input: LoginInput) => {
+  const login = useCallback(async (payload: LoginPayload) => {
     try {
-      const response = await axios.post('/auth/login', input)
+      const response = await axios.post('/auth/login', payload)
       const user = response.data.user
       setUser(user)
     } catch (error) {
       setError(error)
-      throw error
     }
   }, [])
 
@@ -62,7 +60,6 @@ export const AuthProvider = ({ children }: Props) => {
       await checkStatus()
     } catch (error) {
       setError(error)
-      setUser(null)
     }
   }, [])
 

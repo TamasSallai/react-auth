@@ -5,7 +5,7 @@ import { useAuthContext } from '../context/auth'
 import FormGroup from '../components/FormGroup'
 import OAuthButton from '../components/OAuthButton'
 
-type SignInInput = {
+type SignInForm = {
   email: string
   password: string
 }
@@ -22,14 +22,14 @@ const SignIn = () => {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<SignInInput>({
+  } = useForm<SignInForm>({
     defaultValues: {
       email: '',
       password: '',
     },
   })
 
-  const onSubmit = async (data: SignInInput) => {
+  const onSubmit = async (data: SignInForm) => {
     try {
       await login(data)
       navigate(from, { replace: true })
