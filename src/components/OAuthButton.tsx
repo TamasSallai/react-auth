@@ -17,7 +17,7 @@ const OAuthButton = ({ provider }: Props) => {
 
   return (
     <a
-      className="px-4 py-1.5 flex flex-row items-center gap-3  justify-center rounded-sm outline outline-1 outline-gray-300"
+      className="px-4 py-1.5 flex flex-row items-center gap-3  justify-center font-medium rounded-sm outline outline-1 outline-gray-400 transition-shadow duration-300 hover:shadow-md "
       href={`${BACKEND_URL}/api/auth/${provider}/login`}
     >
       <img className="w-5 h-5" src={icons[provider]} alt={`${provider} icon`} />
