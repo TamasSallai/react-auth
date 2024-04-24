@@ -4,6 +4,8 @@ import { AxiosError } from 'axios'
 import { useAuthContext } from '../context/auth'
 import FormGroup from '../components/FormGroup'
 import OAuthButton from '../components/OAuthButton'
+import Button from '../components/Button'
+import Separator from '../components/Separator'
 
 type SignInForm = {
   email: string
@@ -44,19 +46,12 @@ const SignIn = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto px-5 flex flex-col gap-3">
+    <div className="max-w-md mx-auto px-5 flex flex-col gap-4">
       <h1 className="my-5 text-3xl font-bold sm:text-4xl">Sign In.</h1>
 
-      <div className="flex flex-col gap-3">
-        <OAuthButton provider="google" />
-        <OAuthButton provider="github" />
-      </div>
-
-      <div className="w-100 flex flex-row items-center gap-3">
-        <div className="grow h-px bg-black"></div>
-        <span className="grow-0">or sign in with e-mail</span>
-        <div className="grow h-px bg-black"></div>
-      </div>
+      <OAuthButton provider="google" />
+      <OAuthButton provider="github" />
+      <Separator>or sign in with e-mail</Separator>
 
       {errors.root && (
         <p className="px-4 py-1.5 mt-2 rounded-sm outline outline-1 outline-red-700 bg-red-200 text-red-700">
@@ -98,11 +93,9 @@ const SignIn = () => {
           Forgot password?
         </Link>
 
-        <button className="mt-4 px-4 py-1.5 rounded-sm font-medium text-white bg-blue-600 hover:bg-blue-500">
-          Sign In
-        </button>
+        <Button>Sign In</Button>
       </form>
-      <p className="mt-2">
+      <p>
         Don't have and account?{' '}
         <Link className="font-medium text-blue-600" to="/signup">
           Sign Up.
