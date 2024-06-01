@@ -1,9 +1,11 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAuthContext } from '../context/auth'
+import useUser from '../hooks/useUser'
 
 const PublicRoute = () => {
-  const { user } = useAuthContext()
   const location = useLocation()
+  const { data: user, isLoading } = useUser()
+
+  if (isLoading) return <div>...loading</div>
 
   return !user ? (
     <Outlet />
