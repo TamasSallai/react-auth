@@ -1,19 +1,22 @@
-import { useNavigate } from 'react-router-dom'
-import { useAuthContext } from '../context/auth'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { logout } from '../api/auth'
 
 const Home = () => {
-  const { user, logout } = useAuthContext()
-  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+    },
+  })
 
-  const handleClick = async () => {
-    await logout()
-    navigate('/signin')
+  const handleClick = () => {
+    mutation.mutate()
   }
 
   return (
     <div>
       <h1>Home</h1>
-      <p>User: {JSON.stringify(user)}</p>
       <button onClick={handleClick}>logout</button>
     </div>
   )

@@ -1,24 +1,15 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { useAuthContext } from '../context/auth'
+import { register as registerUser } from '../api/auth'
+import { SignUpFormData, SignUpPayload } from '../types'
 import FormGroup from '../components/FormGroup'
+import Separator from '../components/Separator'
 import OAuthButton from '../components/OAuthButton'
 import Button from '../components/Button'
-import Separator from '../components/Separator'
-
-type RegisterForm = {
-  displayName: string
-  firstName?: string
-  lastName?: string
-  email: string
-  password: string
-  confirmPassword: string
-}
 
 const SignUp = () => {
-  const { register: registerUser } = useAuthContext()
-
   const navigate = useNavigate()
 
   const {
@@ -27,7 +18,7 @@ const SignUp = () => {
     watch,
     setError,
     formState: { errors },
-  } = useForm<RegisterForm>({
+  } = useForm<SignUpFormData>({
     defaultValues: {
       displayName: '',
       firstName: '',
@@ -37,32 +28,31 @@ const SignUp = () => {
       confirmPassword: '',
     },
   })
-
   const password = watch('password')
+
+  const mutation = useMutation({
+    mutationFn: (payload: SignUpPayload) => registerUser(payload),
+    onSuccess: () => navigate('/home'),
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const data = error.response?.data // response data
+        const message = data ? data.error.message : 'Something went wrong'
+        setError('root', { type: 'custom', message })
+      }
+    },
+  })
 
   const onSubmit = async ({
     firstName,
     lastName,
     confirmPassword,
     ...data
-  }: RegisterForm) => {
-    const payload = {
+  }: SignUpFormData) => {
+    mutation.mutate({
       ...data,
       ...(firstName && { firstName }),
       ...(lastName && { lastName }),
-    }
-
-    try {
-      await registerUser(payload)
-      navigate('/home')
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const message = error.response
-          ? error.response.data.message
-          : 'Something went wrong'
-        setError('root', { type: 'custom', message })
-      }
-    }
+    })
   }
 
   return (

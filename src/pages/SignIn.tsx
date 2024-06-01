@@ -1,20 +1,15 @@
 import { useForm } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { useAuthContext } from '../context/auth'
+import { login } from '../api/auth'
+import { SignInFormData, SignInPayload } from '../types'
 import FormGroup from '../components/FormGroup'
+import Separator from '../components/Separator'
 import OAuthButton from '../components/OAuthButton'
 import Button from '../components/Button'
-import Separator from '../components/Separator'
-
-type SignInForm = {
-  email: string
-  password: string
-}
 
 const SignIn = () => {
-  const { login } = useAuthContext()
-
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
@@ -24,25 +19,27 @@ const SignIn = () => {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<SignInForm>({
+  } = useForm<SignInFormData>({
     defaultValues: {
       email: '',
       password: '',
     },
   })
 
-  const onSubmit = async (data: SignInForm) => {
-    try {
-      await login(data)
-      navigate(from, { replace: true })
-    } catch (error) {
+  const mutation = useMutation({
+    mutationFn: (payload: SignInPayload) => login(payload),
+    onSuccess: () => navigate(from, { replace: true }),
+    onError: (error) => {
       if (error instanceof AxiosError) {
-        const message = error.response
-          ? error.response.data.message
-          : 'Something went wrong'
+        const data = error.response?.data // response data
+        const message = data ? data.error.message : 'Something went wrong'
         setError('root', { type: 'custom', message })
       }
-    }
+    },
+  })
+
+  const onSubmit = (data: SignInFormData) => {
+    mutation.mutate(data)
   }
 
   return (
