@@ -43,61 +43,63 @@ const SignIn = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto px-5 flex flex-col gap-4">
-      <h1 className="my-5 text-3xl font-bold sm:text-4xl">Sign In.</h1>
+    <div className="bg-gray-50 h-screen">
+      <div className="max-w-md mx-auto px-5 flex flex-col gap-4">
+        <h1 className="my-5 text-3xl font-bold sm:text-4xl">Sign In.</h1>
 
-      <OAuthButton provider="google" />
-      <OAuthButton provider="github" />
-      <Separator>or sign in with e-mail</Separator>
+        <OAuthButton provider="google" />
+        <OAuthButton provider="github" />
+        <Separator>or sign in with e-mail</Separator>
 
-      {errors.root && (
-        <p className="px-4 py-1.5 mt-2 rounded-sm outline outline-1 outline-red-700 bg-red-200 text-red-700">
-          {errors.root.message}
+        {errors.root && (
+          <p className="px-4 py-1.5 mt-2 rounded-sm outline outline-1 outline-red-700 bg-red-200 text-red-700">
+            {errors.root.message}
+          </p>
+        )}
+
+        <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+          <FormGroup
+            id="email"
+            label="E-mail"
+            type="text"
+            placeholder="example@email.com"
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i,
+                message: 'Invalid email address',
+              },
+            })}
+            fieldError={errors.email}
+          />
+
+          <FormGroup
+            id="password"
+            label="Password"
+            type="password"
+            {...register('password', {
+              required: 'Password is required',
+              minLength: {
+                value: 6,
+                message: 'Must be 6 or more character',
+              },
+            })}
+            fieldError={errors.password}
+          />
+
+          <Link className="self-end font-medium text-blue-600" to="/">
+            Forgot password?
+          </Link>
+
+          <Button>Sign In</Button>
+        </form>
+        <p>
+          Don't have and account?{' '}
+          <Link className="font-medium text-blue-600" to="/signup">
+            Sign Up.
+          </Link>
         </p>
-      )}
-
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-        <FormGroup
-          id="email"
-          label="E-mail"
-          type="text"
-          placeholder="example@email.com"
-          {...register('email', {
-            required: 'Email is required',
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i,
-              message: 'Invalid email address',
-            },
-          })}
-          fieldError={errors.email}
-        />
-
-        <FormGroup
-          id="password"
-          label="Password"
-          type="password"
-          {...register('password', {
-            required: 'Password is required',
-            minLength: {
-              value: 6,
-              message: 'Must be 6 or more character',
-            },
-          })}
-          fieldError={errors.password}
-        />
-
-        <Link className="self-end font-medium text-blue-600" to="/">
-          Forgot password?
-        </Link>
-
-        <Button>Sign In</Button>
-      </form>
-      <p>
-        Don't have and account?{' '}
-        <Link className="font-medium text-blue-600" to="/signup">
-          Sign Up.
-        </Link>
-      </p>
+      </div>
     </div>
   )
 }

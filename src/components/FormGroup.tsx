@@ -19,7 +19,7 @@ const FormGroup = forwardRef((props: Props, ref: Ref<HTMLInputElement>) => {
       </label>
 
       <input
-        className="px-4 py-1.5 mt-2 rounded-sm text-gray-900 placeholder:text-gray-400 outline outline-1 outline-gray-400 focus:outline-2 focus:outline-blue-400 aria-invalid:outline-red-600 focus:aria-invalid:outline-red-600 sm:text-sm sm:leading-6"
+        className="px-4 py-2 mt-2 rounded-sm text-gray-900 placeholder:text-gray-400 outline outline-1 outline-gray-400 focus:outline-2 focus:outline-blue-400 aria-invalid:outline-red-600 focus:aria-invalid:outline-red-600 sm:text-sm sm:leading-6"
         id={id}
         ref={ref}
         {...inputProps}
