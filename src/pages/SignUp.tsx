@@ -64,11 +64,7 @@ const SignUp = () => {
         <OAuthButton provider="github" />
         <Separator>or sign up with e-mail</Separator>
 
-        {errors.root && (
-          <p className="px-4 py-1.5 mt-2 rounded-sm outline outline-1 outline-red-700 bg-red-200 text-red-700">
-            {errors.root.message}
-          </p>
-        )}
+        {errors.root && <FormError errorMessage={errors.root.message!} />}
 
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
           <InputGroup
