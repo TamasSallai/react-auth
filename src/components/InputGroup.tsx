@@ -1,11 +1,9 @@
-import { Ref, forwardRef } from 'react'
+import { InputHTMLAttributes, Ref, forwardRef } from 'react'
 import { FieldError } from 'react-hook-form'
 
-type Props = {
+type Props = InputHTMLAttributes<HTMLInputElement> & {
   id: string
   label: string
-  type: 'text' | 'password'
-  placeholder?: string
   fieldError?: FieldError
 }
 
@@ -27,7 +25,9 @@ const InputGroup = forwardRef((props: Props, ref: Ref<HTMLInputElement>) => {
       />
 
       {fieldError && (
-        <p className="mt-1 text-sm text-red-600">{fieldError.message}</p>
+        <p className="mt-1 text-sm text-red-600" role="alert">
+          {fieldError.message}
+        </p>
       )}
     </div>
   )
