@@ -151,7 +151,13 @@ const SignUp = () => {
             fieldError={errors.confirmPassword}
           />
 
-          <Button style="mt-4">Sign Up</Button>
+          <Button
+            className="mt-4 "
+            disabled={mutation.isPending}
+            aria-busy={mutation.isPending}
+          >
+            Sign Up
+          </Button>
         </form>
         <p>
           Already have an account?{' '}
