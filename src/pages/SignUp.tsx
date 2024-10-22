@@ -2,12 +2,12 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { register as registerUser } from '../api/auth'
+import { register as registerUser } from '@api/auth'
 import { SignUpFormData, SignUpPayload } from '../types'
-import InputGroup from '../components/InputGroup'
-import Separator from '../components/Separator'
-import OAuthButton from '../components/OAuthButton'
-import Button from '../components/Button'
+import OAuthButton from '@components/OAuthButton'
+import InputGroup from '@components/InputGroup'
+import Separator from '@components/Separator'
+import Button from '@components/Button'
 
 const SignUp = () => {
   const navigate = useNavigate()

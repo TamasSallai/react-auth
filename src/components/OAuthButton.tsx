@@ -1,5 +1,5 @@
-import googleIcon from '../assets/icons/google.svg'
-import githubIcon from '../assets/icons/github.svg'
+import googleIcon from '@assets/icons/google.svg'
+import githubIcon from '@assets/icons/github.svg'
 
 type Props = {
   provider: 'google' | 'github'

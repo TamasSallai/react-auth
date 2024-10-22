@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { logout } from '../api/auth'
+import { logout } from '@api/auth'
 
 const Home = () => {
   const queryClient = useQueryClient()
