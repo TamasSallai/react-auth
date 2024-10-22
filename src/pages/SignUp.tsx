@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { register as registerUser } from '../api/auth'
 import { SignUpFormData, SignUpPayload } from '../types'
-import FormGroup from '../components/FormGroup'
+import InputGroup from '../components/InputGroup'
 import Separator from '../components/Separator'
 import OAuthButton from '../components/OAuthButton'
 import Button from '../components/Button'
@@ -71,7 +71,7 @@ const SignUp = () => {
         )}
 
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-          <FormGroup
+          <InputGroup
             id="displayName"
             label="Display Name*"
             type="text"
@@ -86,7 +86,7 @@ const SignUp = () => {
           />
 
           <div className="flex flex-col gap-3 sm:flex-row ">
-            <FormGroup
+            <InputGroup
               id="firstName"
               label="First Name"
               type="text"
@@ -99,7 +99,7 @@ const SignUp = () => {
               fieldError={errors.firstName}
             />
 
-            <FormGroup
+            <InputGroup
               id="lastName"
               label="Last Name"
               type="text"
@@ -113,7 +113,7 @@ const SignUp = () => {
             />
           </div>
 
-          <FormGroup
+          <InputGroup
             id="email"
             label="E-mail*"
             type="text"
@@ -128,7 +128,7 @@ const SignUp = () => {
             fieldError={errors.email}
           />
 
-          <FormGroup
+          <InputGroup
             id="password"
             label="Password*"
             type="password"
@@ -142,7 +142,7 @@ const SignUp = () => {
             fieldError={errors.password}
           />
 
-          <FormGroup
+          <InputGroup
             id="confirmPassword"
             label="Confirm Password*"
             type="password"

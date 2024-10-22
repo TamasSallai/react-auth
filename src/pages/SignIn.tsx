@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { login } from '../api/auth'
 import { SignInFormData, SignInPayload } from '../types'
-import FormGroup from '../components/FormGroup'
+import InputGroup from '../components/InputGroup'
 import Separator from '../components/Separator'
 import OAuthButton from '../components/OAuthButton'
 import Button from '../components/Button'
@@ -58,7 +58,7 @@ const SignIn = () => {
         )}
 
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-          <FormGroup
+          <InputGroup
             id="email"
             label="E-mail"
             type="text"
@@ -73,7 +73,7 @@ const SignIn = () => {
             fieldError={errors.email}
           />
 
-          <FormGroup
+          <InputGroup
             id="password"
             label="Password"
             type="password"

@@ -9,7 +9,7 @@ type Props = {
   fieldError?: FieldError
 }
 
-const FormGroup = forwardRef((props: Props, ref: Ref<HTMLInputElement>) => {
+const InputGroup = forwardRef((props: Props, ref: Ref<HTMLInputElement>) => {
   const { id, label, fieldError, ...inputProps } = props
 
   return (
@@ -33,4 +33,4 @@ const FormGroup = forwardRef((props: Props, ref: Ref<HTMLInputElement>) => {
   )
 })
 
-export default FormGroup
+export default InputGroup
