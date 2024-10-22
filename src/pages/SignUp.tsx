@@ -8,6 +8,7 @@ import OAuthButton from '@components/OAuthButton'
 import InputGroup from '@components/InputGroup'
 import Separator from '@components/Separator'
 import Button from '@components/Button'
+import FormError from '@components/FormError'
 
 const SignUp = () => {
   const navigate = useNavigate()
