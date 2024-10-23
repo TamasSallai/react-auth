@@ -36,8 +36,8 @@ const SignUp = () => {
     onSuccess: () => navigate('/home'),
     onError: (error) => {
       if (error instanceof AxiosError) {
-        const data = error.response?.data // response data
-        const message = data ? data.error.message : 'Something went wrong'
+        const data = error.response?.data
+        const message = data ? data.message : 'Something went wrong'
         setError('root', { type: 'custom', message })
       }
     },
@@ -132,8 +132,8 @@ const SignUp = () => {
             {...register('password', {
               required: 'Password is required',
               minLength: {
-                value: 6,
-                message: 'Must be 6 or more character',
+                value: 8,
+                message: 'Must be 8 or more character',
               },
             })}
             fieldError={errors.password}
