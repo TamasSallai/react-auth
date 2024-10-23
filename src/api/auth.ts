@@ -19,9 +19,9 @@ export const register = async (payload: SignUpPayload): Promise<User> => {
   }
 }
 
-export const profile = async (): Promise<User | null> => {
+export const me = async (): Promise<User | null> => {
   try {
-    const { data } = await axios.get('/auth/profile')
+    const { data } = await axios.get('/auth/me')
     return data.user
   } catch (error) {
     return null

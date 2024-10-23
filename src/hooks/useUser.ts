@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { profile } from '@api/auth'
+import { me } from '@api/auth'
 import { User } from '../types'
 
 const useUser = () => {
   return useQuery<User | null>({
     queryKey: ['user'],
-    queryFn: profile,
+    queryFn: me,
     retry: false,
   })
 }
